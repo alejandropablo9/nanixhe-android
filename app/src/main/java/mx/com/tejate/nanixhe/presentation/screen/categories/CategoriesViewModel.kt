@@ -1,4 +1,4 @@
-package mx.com.tejate.nanixhe.presentation.screen.home
+package mx.com.tejate.nanixhe.presentation.screen.categories
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -14,17 +14,13 @@ import mx.com.tejate.domain.util.Result
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class CategoriesViewModel @Inject constructor(
     private val getCategoriesUseCase: GetCategoriesUseCase,
     private val getMealsByCategoryUseCase: GetMealsByCategoryUseCase
 ) : ViewModel() {
     /// Categorias
     private val _categories = mutableStateOf<Result<Categories>>(Result.Loading())
     val categoriesState: State<Result<Categories>> = _categories
-
-    /// Platillos
-    private val _meals = mutableStateOf<Result<Meals>>(Result.Loading())
-    val mealsState: State<Result<Meals>> = _meals
 
     init {
         getCategories()
@@ -36,9 +32,4 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getMeals(categoryName: String) {
-        viewModelScope.launch {
-            _meals.value = getMealsByCategoryUseCase(categoryName)
-        }
-    }
 }

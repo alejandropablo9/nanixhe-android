@@ -1,7 +1,12 @@
 package mx.com.tejate.nanixhe.presentation.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -21,7 +26,8 @@ import mx.com.tejate.domain.model.Meal
 fun CardMealItem(item: Meal, navController: NavController) {
     Card(
         modifier = Modifier
-            .padding(4.dp),
+            .padding(4.dp)
+            .clickable {  },
         shape = RoundedCornerShape(10.dp),
         backgroundColor = MaterialTheme.colors.surface
     ) {
@@ -60,6 +66,19 @@ fun CardMealItem(item: Meal, navController: NavController) {
                         .align(Alignment.Center)
                 )
             }
+        }
+    }
+}
+
+@ExperimentalFoundationApi
+@Composable
+fun GridMeals(list: List<Meal>, navController: NavController) {
+    LazyVerticalGrid(
+        cells = GridCells.Fixed(2),
+        modifier = Modifier.padding(16.dp)
+    ) {
+        items(list) { item ->
+            CardMealItem(item = item, navController = navController)
         }
     }
 }

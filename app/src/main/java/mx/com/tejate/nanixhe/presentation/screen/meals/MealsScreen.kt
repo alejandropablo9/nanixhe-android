@@ -1,7 +1,11 @@
-package mx.com.tejate.nanixhe.presentation.screen.home
+package mx.com.tejate.nanixhe.presentation.screen.meals
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -16,30 +20,37 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import mx.com.tejate.domain.util.Result
-import mx.com.tejate.nanixhe.presentation.components.CategoriesComponent
-import mx.com.tejate.nanixhe.presentation.components.ProgressBar
 import mx.com.tejate.nanixhe.R
+import mx.com.tejate.nanixhe.presentation.components.GridMeals
+import mx.com.tejate.nanixhe.presentation.components.ProgressBar
 
+@ExperimentalFoundationApi
 @Composable
-fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hiltViewModel()) {
+fun MealsScreen(
+    categoryName: String,
+    navController: NavHostController,
+    viewModel: MealsViewModel = hiltViewModel()
+) {
     Scaffold() {
+        viewModel.getMeals(categoryName)
         Column(modifier = Modifier.fillMaxSize()) {
             Row {
                 Text(
-                    text = stringResource(id = R.string.app_name),
+                    text = categoryName,
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
                         fontSize = 24.sp,
                         fontFamily = FontFamily.SansSerif
                     ),
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(horizontal = 16.dp)
                 )
             }
-            Row {
-                when (val response = viewModel.categoriesState.value) {
+            Column {
+                when (val response = viewModel.mealsState.value) {
                     is Result.Loading -> ProgressBar()
-                    is Result.Success -> CategoriesComponent(
-                        list = response.data?.list ?: emptyList()
+                    is Result.Success -> GridMeals(
+                        list = response.data?.list ?: emptyList(),
+                        navController = navController
                     )
                     is Result.Error -> {
                         Toast.makeText(
